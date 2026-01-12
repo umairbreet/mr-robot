@@ -75,3 +75,4 @@ export const createContentCardTableIfNotExists = async () => {
         }
     }
 };
+//# sourceMappingURL=db.js.map

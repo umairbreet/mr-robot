@@ -40,3 +40,4 @@ export const getAllContentCards = async () => {
         throw err;
     }
 };
+//# sourceMappingURL=contentCardModel.js.map

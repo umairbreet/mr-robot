@@ -1,16 +1,51 @@
 # Deployment Guide for imagetools.shop
 
-## Overview
-This project is configured to run on the domain **imagetools.shop** with proper CORS setup and environment variables.
+## Server Information
+- **Hosting**: LiteSpeed Web Server (LSWS)
+- **Node Path**: /opt/alt/alt-nodejs18/root/usr/bin
+- **Frontend Path**: /home/u688789577/domains/imagetools.shop/public_html/
+- **Backend Path**: /home/u688789577/domains/imagetools.shop/backend/
 
-## Architecture
-- **Frontend**: React app (mr-robot) - runs on https://imagetools.shop
-- **Backend API**: Express.js (backend-robot) - runs on https://api.imagetools.shop
-- **Database**: PostgreSQL/Supabase
+## Build Instructions
+
+### Step 1: Build Locally
+```bash
+# Windows
+build.bat
+
+# Linux/Mac
+./build.sh
+```
+
+This creates:
+- `mr-robot/dist/` - Frontend build
+- `backend-robot/dist/` - Backend compiled JavaScript
+
+### Step 2: Deploy Frontend
+```bash
+# Upload contents of mr-robot/dist/ to:
+/home/u688789577/domains/imagetools.shop/public_html/
+
+# Ensure index.html is at root
+```
+
+### Step 3: Deploy Backend
+```bash
+# Upload to backend folder:
+/home/u688789577/domains/imagetools.shop/backend/
+
+# Copy these files/folders:
+- dist/ (compiled JavaScript)
+- node_modules/ (dependencies)
+- .env.production (environment variables)
+- package.json
+- package-lock.json
+```
 
 ## Environment Configuration
 
 ### Frontend (.env.production)
+Located in: `mr-robot/.env.production`
 ```
 VITE_APP_ENV=production
 VITE_API_URL=https://api.imagetools.shop
@@ -19,6 +54,7 @@ VITE_SPEED_TEST_ENABLED=false
 ```
 
 ### Backend (.env.production)
+Located in: `backend-robot/.env.production`
 ```
 NODE_ENV=production
 PORT=5000
@@ -30,58 +66,11 @@ DB_PORT=5432
 CORS_ORIGIN=https://imagetools.shop
 ```
 
-## Deployment Steps
+## Node.js Configuration on LiteSpeed
 
-### 1. Frontend Deployment (to https://imagetools.shop)
-```bash
-cd mr-robot
-npm run build
-# Upload dist/ contents to web server at imagetools.shop root
-```
+For your LiteSpeed server configuration:
 
-### 2. Backend Deployment (to https://api.imagetools.shop)
-```bash
-cd backend-robot
-npm run build
-# Start with: NODE_ENV=production npm start
-# Ensure it runs on port 5000
-```
-
-### 3. DNS/Server Configuration Required
-- **imagetools.shop** → Frontend web server
-- **api.imagetools.shop** → Backend API server (port 5000)
-
-### 4. SSL/HTTPS
-- Ensure SSL certificates are installed on both domains
-- Update CORS settings in [backend-robot/src/app.ts](backend-robot/src/app.ts) if needed
-
-## Testing Domain Connection
-```bash
-# Test backend API health
-curl https://api.imagetools.shop/health
-
-# Test database connection
-curl https://api.imagetools.shop/health/db
-
-# Test from frontend
-# The API_URL environment variable will automatically use the production domain
-```
-
-## API Endpoints
-All endpoints are prefixed with `/api`:
-- `GET /api/cards` - Fetch all content cards
-- `POST /api/cards` - Create new content card
-- `PUT /api/cards/:id` - Update content card
-- `DELETE /api/cards/:id` - Delete content card
-
-## Current CORS Settings
-The backend accepts requests from:
-- http://localhost:5173
-- http://localhost:5174
-- http://localhost:5175
-- http://localhost:8080
-- http://localhost:3000
-- https://imagetools.shop
-- http://imagetools.shop
-
-See [backend-robot/src/app.ts](backend-robot/src/app.ts) line 9-16 to modify.
+1. **Node.js App Entry**: `dist/server.js`
+2. **App Port**: `5000`
+3. **Working Directory**: `/home/u688789577/domains/imagetools.shop/backend/`
+4. **Node.js Version**: 18.20.8 (or higher)

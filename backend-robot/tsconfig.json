@@ -9,8 +9,13 @@
     "skipLibCheck": true,
     "outDir": "./dist",
     "rootDir": "./src",
-    "verbatimModuleSyntax": false
+    "verbatimModuleSyntax": true,
+    "declaration": true,
+    "sourceMap": true,
+    "resolveJsonModule": true
   },
+  "include": ["src"],
+  "exclude": ["node_modules", "dist", "test-connection.ts"],
   "ts-node": {
     "esm": true,
     "experimentalEsm": true

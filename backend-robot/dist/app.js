@@ -39,3 +39,4 @@ app.get('/health/db', async (req, res) => {
 // Routes
 app.use('/api', contentCardRoutes);
 export default app;
+//# sourceMappingURL=app.js.map

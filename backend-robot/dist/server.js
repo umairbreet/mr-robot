@@ -21,3 +21,4 @@ const PORT = process.env.PORT || 5000;
         process.exit(1);
     }
 })();
+//# sourceMappingURL=server.js.map

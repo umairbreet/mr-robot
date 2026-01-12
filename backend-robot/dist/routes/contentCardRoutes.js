@@ -4,3 +4,4 @@ const router = Router();
 router.get('/cards', fetchCards); // Fetch all cards
 router.post('/cards', createCard); // Create a new card
 export default router;
+//# sourceMappingURL=contentCardRoutes.js.map
