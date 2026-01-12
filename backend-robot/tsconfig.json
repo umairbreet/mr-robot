@@ -10,5 +10,9 @@
     "outDir": "./dist",
     "rootDir": "./src",
     "verbatimModuleSyntax": false
+  },
+  "ts-node": {
+    "esm": true,
+    "experimentalEsm": true
   }
 }
