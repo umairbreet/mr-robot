@@ -1,5 +1,5 @@
 import type { Request, Response } from 'express';
-import { addContentCard, getAllContentCards } from '../models/contentCardModel';
+import { addContentCard, getAllContentCards } from '../models/contentCardModel.js';
 
 export const createCard = async (req: Request, res: Response) => {
     try {

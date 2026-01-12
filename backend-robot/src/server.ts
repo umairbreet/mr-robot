@@ -1,12 +1,12 @@
-import app from './app';
-import { initializeDatabase } from './utils/db';
+import app from './app.js';
+import { initializeDatabase } from './utils/db.js';
 import dotenv from 'dotenv';
 
 // Load environment variables
 dotenv.config({
-  path: process.env.NODE_ENV === 'production' 
-    ? '.env.production' 
-    : '.env.development'
+    path: process.env.NODE_ENV === 'production'
+        ? '.env.production'
+        : '.env.development'
 });
 
 const PORT = process.env.PORT || 5000;

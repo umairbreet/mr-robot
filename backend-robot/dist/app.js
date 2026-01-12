@@ -1,7 +1,7 @@
 import express from 'express';
 import cors from 'cors';
-import contentCardRoutes from './routes/contentCardRoutes';
-import { pool } from './utils/db';
+import contentCardRoutes from './routes/contentCardRoutes.js';
+import { pool } from './utils/db.js';
 const app = express();
 // Enable CORS for production and local development
 const allowedOrigins = [

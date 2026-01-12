@@ -1,4 +1,4 @@
-import { pool, createContentCardTableIfNotExists } from '../utils/db';
+import { pool, createContentCardTableIfNotExists } from '../utils/db.js';
 
 export interface ContentCard {
     id?: number;
@@ -15,16 +15,16 @@ export interface ContentCard {
 
 export const addContentCard = async (card: ContentCard) => {
     await createContentCardTableIfNotExists();
-    
-    const { 
-        title, 
-        description, 
-        image_url, 
-        hackLevel = 5, 
-        status = 'secure', 
-        dataSize = '0MB' 
+
+    const {
+        title,
+        description,
+        image_url,
+        hackLevel = 5,
+        status = 'secure',
+        dataSize = '0MB'
     } = card;
-    
+
     const query = `INSERT INTO content_cards (title, description, image_url, hack_level, status, data_size)
          VALUES ($1, $2, $3, $4, $5, $6) RETURNING *`;
     const params = [title, description, image_url, hackLevel, status, dataSize];

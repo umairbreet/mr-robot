@@ -1,4 +1,4 @@
-import { pool, createContentCardTableIfNotExists } from '../utils/db';
+import { pool, createContentCardTableIfNotExists } from '../utils/db.js';
 export const addContentCard = async (card) => {
     await createContentCardTableIfNotExists();
     const { title, description, image_url, hackLevel = 5, status = 'secure', dataSize = '0MB' } = card;
