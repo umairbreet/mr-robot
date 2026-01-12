@@ -1,6 +1,7 @@
 // src/components/Footer/Footer.tsx
 import { useState, useEffect } from 'react';
-import { networkMonitor, NetworkInfo } from '../../services/networkMonitor';
+import { networkMonitor } from '../../services/networkMonitor';
+import type { NetworkInfo } from '../../services/networkMonitor';
 
 const Footer: React.FC = () => {
     const [currentTime, setCurrentTime] = useState('');

@@ -84,7 +84,6 @@ const StatsGrid: React.FC<StatsGridProps> = ({ stats }) => {
                 const colorClasses = getColorClasses(stat.color);
                 const progressWidth = getProgressWidth(stat);
                 const trendIcon = getTrendIcon(stat.label);
-                const hexColor = stat.color;
 
                 return (
                     <div

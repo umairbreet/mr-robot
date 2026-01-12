@@ -1,38 +1,15 @@
 import { pool, createContentCardTableIfNotExists } from '../utils/db';
-
-export interface ContentCard {
-    id?: number;
-    title: string;
-    description?: string;
-    image_url?: string;
-    hackLevel?: number;
-    status?: 'active' | 'breached' | 'secure' | 'critical';
-    dataSize?: string;
-    created_at?: string;
-}
-
-
-
-export const addContentCard = async (card: ContentCard) => {
+export const addContentCard = async (card) => {
     await createContentCardTableIfNotExists();
-    
-    const { 
-        title, 
-        description, 
-        image_url, 
-        hackLevel = 5, 
-        status = 'secure', 
-        dataSize = '0MB' 
-    } = card;
-    
+    const { title, description, image_url, hackLevel = 5, status = 'secure', dataSize = '0MB' } = card;
     const query = `INSERT INTO content_cards (title, description, image_url, hack_level, status, data_size)
          VALUES ($1, $2, $3, $4, $5, $6) RETURNING *`;
     const params = [title, description, image_url, hackLevel, status, dataSize];
-
     try {
         const result = await pool.query(query, params);
         return result.rows[0];
-    } catch (err) {
+    }
+    catch (err) {
         console.error('DB error in addContentCard:', {
             query,
             params,
@@ -41,8 +18,7 @@ export const addContentCard = async (card: ContentCard) => {
         throw err;
     }
 };
-
-export const getAllContentCards = async (): Promise<ContentCard[]> => {
+export const getAllContentCards = async () => {
     await createContentCardTableIfNotExists();
     const query = `SELECT 
             id,
@@ -55,11 +31,11 @@ export const getAllContentCards = async (): Promise<ContentCard[]> => {
             created_at
         FROM content_cards 
         ORDER BY created_at DESC`;
-
     try {
         const result = await pool.query(query);
         return result.rows;
-    } catch (err) {
+    }
+    catch (err) {
         console.error('DB error in getAllContentCards:', { query, error: err instanceof Error ? err.stack || err.message : err });
         throw err;
     }

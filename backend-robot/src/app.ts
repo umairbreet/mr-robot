@@ -1,13 +1,22 @@
 import express from 'express';
 import cors from 'cors';
-import contentCardRoutes from './routes/contentCardRoutes.ts';
-import { pool } from './utils/db.ts';
+import contentCardRoutes from './routes/contentCardRoutes';
+import { pool } from './utils/db';
 
 const app = express();
 
-// Enable CORS
+// Enable CORS for production and local development
+const allowedOrigins = [
+  'http://localhost:5173',
+  'http://localhost:5174',
+  'http://localhost:5175',
+  'http://localhost:8080',
+  'https://imagetools.shop',
+  'http://imagetools.shop'
+];
+
 app.use(cors({
-  origin: ['http://localhost:5173', 'http://localhost:5174', 'http://localhost:5175', 'http://localhost:8080'],
+  origin: allowedOrigins,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   credentials: true
 }));

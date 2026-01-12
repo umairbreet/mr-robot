@@ -31,7 +31,7 @@ const Contact: React.FC = () => {
                 setLoading(true);
                 setError(null);
                 const data = await fetchContentCards();
-                setCards(data);
+                setCards(data as ContentCardData[]);
             } catch (err) {
                 const errorMessage = err instanceof Error ? err.message : 'Failed to fetch cards';
                 console.error('Error fetching cards:', err);
