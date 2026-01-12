@@ -6,7 +6,7 @@
   "main": "backend-robot/dist/server.js",
   "scripts": {
     "install-all": "npm install && cd backend-robot && npm install && cd ../mr-robot && npm install && cd ..",
-    "build": "cd backend-robot && npm install && npm run build && cd ../mr-robot && npm install && npm run build && cd ..",
+    "build": "cd backend-robot && npm install --include=dev && npm run build && cd ../mr-robot && npm install --include=dev && npm run build && cd ..",
     "start": "node backend-robot/dist/server.js",
     "dev": "npm --prefix backend-robot run dev & npm --prefix mr-robot run dev",
     "dev:backend": "npm --prefix backend-robot run dev",
