@@ -1,0 +1,93 @@
+name: Build and Deploy to Hostinger
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch: # Allow manual trigger
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: |
+            package-lock.json
+            backend-robot/package-lock.json
+            mr-robot/package-lock.json
+
+      # Build Backend
+      - name: Install backend dependencies
+        working-directory: backend-robot
+        run: npm ci
+
+      - name: Build backend (TypeScript → JavaScript)
+        working-directory: backend-robot
+        run: npm run build
+
+      # Build Frontend
+      - name: Install frontend dependencies
+        working-directory: mr-robot
+        run: npm ci
+
+      - name: Build frontend (Vite)
+        working-directory: mr-robot
+        run: npm run build
+
+      # Deploy to deploy branch
+      - name: Deploy to deploy branch
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+          
+          # Create a temporary directory for deploy files
+          mkdir -p deploy-temp
+          
+          # Copy root files needed for Hostinger
+          cp package.json deploy-temp/
+          cp -r backend-robot/dist deploy-temp/backend-dist
+          cp backend-robot/package.json deploy-temp/backend-package.json
+          cp -r mr-robot/dist deploy-temp/frontend-dist
+          
+          # Copy environment files if they exist
+          [ -f .env.production ] && cp .env.production deploy-temp/ || true
+          [ -f backend-robot/.env.production ] && cp backend-robot/.env.production deploy-temp/backend-env.production || true
+          
+          # Switch to deploy branch (create if doesn't exist)
+          git checkout --orphan deploy-temp-branch || git checkout deploy-temp-branch
+          
+          # Remove all files except .git
+          git rm -rf . || true
+          
+          # Create directory structure for Hostinger
+          mkdir -p backend-robot/dist
+          mkdir -p mr-robot/dist
+          
+          # Copy built files
+          cp -r deploy-temp/backend-dist/* backend-robot/dist/
+          cp deploy-temp/backend-package.json backend-robot/package.json
+          cp -r deploy-temp/frontend-dist/* mr-robot/dist/
+          cp deploy-temp/package.json ./
+          
+          # Copy env files
+          [ -f deploy-temp/.env.production ] && cp deploy-temp/.env.production ./ || true
+          [ -f deploy-temp/backend-env.production ] && cp deploy-temp/backend-env.production backend-robot/.env.production || true
+          
+          # Create a simple index.html redirect if needed
+          echo '<!DOCTYPE html><html><head><meta http-equiv="refresh" content="0;url=/mr-robot/dist/"></head></html>' > index.html
+          
+          # Add and commit
+          git add -A
+          git commit -m "Deploy: Build $(date +'%Y-%m-%d %H:%M:%S')" || echo "No changes to commit"
+          
+          # Force push to deploy branch
+          git push origin HEAD:deploy --force
