@@ -46,8 +46,8 @@ jobs:
       # Deploy to deploy branch
       - name: Deploy to deploy branch
         run: |
-          git config --global user.name "GitHub Actions"
-          git config --global user.email "actions@github.com"
+          git config --global user.name "Robo Breet"
+          git config --global user.email "devilrex429@gmail.com"
           
           # Create a temporary directory for deploy files
           mkdir -p deploy-temp
