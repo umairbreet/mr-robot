@@ -74,3 +74,32 @@ For your LiteSpeed server configuration:
 2. **App Port**: `5000`
 3. **Working Directory**: `/home/u688789577/domains/imagetools.shop/backend/`
 4. **Node.js Version**: 18.20.8 (or higher)
+
+# Full Project Deployment Guide
+
+## Frontend (mr-robot)
+- Framework: React (Vite)
+- Build: `npm run build` (creates `dist/`)
+- Upload `dist/` contents to Hostinger `public_html` directory
+- Select "React" or "Vite" preset in Hostinger
+
+## Backend (backend-robot)
+- Framework: Node.js (Custom)
+- Build: `npm install && npm run build` (creates `dist/`)
+- Upload `dist/`, `node_modules/`, `.env.production` to Hostinger backend directory
+- Entry file: `dist/server.js`
+- Node version: 18.x
+- Start: `node dist/server.js`
+
+## Environment Files
+- `.env.production` (backend-robot): contains DB and app config
+- Do NOT commit `.env.production` to GitHub
+
+## GitHub → Hostinger
+- Push all code to GitHub (main branch)
+- On Hostinger, pull from GitHub and follow above steps
+
+## Notes
+- No backend framework selection needed—just Node.js entry file
+- Frontend is static React/Vite build
+- Backend is Node.js app with environment variables
